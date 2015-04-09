@@ -94,4 +94,19 @@ public interface RequestCodes {
      * Request to view a repository
      */
     int REPOSITORY_VIEW = 12;
+
+    /**
+     * Request to enter two-factor authentication OTP code
+     */
+    int OTP_CODE_ENTER = 13;
+
+    /**
+     * Request to edit a comment
+     */
+    int COMMENT_EDIT = 14;
+
+    /**
+     * Request to delete a comment
+     */
+    int COMMENT_DELETE = 15;
 }

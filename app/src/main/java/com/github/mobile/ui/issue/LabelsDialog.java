@@ -17,10 +17,9 @@ package com.github.mobile.ui.issue;
 
 import static java.lang.String.CASE_INSENSITIVE_ORDER;
 import android.accounts.Account;
-import android.text.TextUtils;
 import android.util.Log;
 
-import com.github.mobile.R.string;
+import com.github.mobile.R;
 import com.github.mobile.ui.DialogFragmentActivity;
 import com.github.mobile.ui.ProgressDialogTask;
 import com.github.mobile.util.ToastUtils;
@@ -97,30 +96,16 @@ public class LabelsDialog {
                 super.onException(e);
 
                 Log.d(TAG, "Exception loading labels", e);
-                ToastUtils.show(activity, e, string.error_labels_load);
+                ToastUtils.show(activity, e, R.string.error_labels_load);
             }
 
             @Override
             public void execute() {
-                showIndeterminate(string.loading_labels);
+                showIndeterminate(R.string.loading_labels);
 
                 super.execute();
             }
         }.execute();
-    }
-
-    /**
-     * Get label with name
-     *
-     * @param name
-     * @return label or null if none with name
-     */
-    public Label getLabel(String name) {
-        if (labels == null)
-            return null;
-        if (TextUtils.isEmpty(name))
-            return null;
-        return labels.get(name);
     }
 
     /**
@@ -145,6 +130,6 @@ public class LabelsDialog {
                     checked[i] = true;
         }
         LabelsDialogFragment.show(activity, requestCode,
-                activity.getString(string.select_labels), null, names, checked);
+                activity.getString(R.string.select_labels), null, names, checked);
     }
 }

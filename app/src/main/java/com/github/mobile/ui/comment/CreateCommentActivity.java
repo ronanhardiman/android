@@ -20,13 +20,12 @@ import static com.github.mobile.util.TypefaceUtils.ICON_EDIT;
 import static com.github.mobile.util.TypefaceUtils.ICON_WATCH;
 import android.content.Intent;
 import android.os.Bundle;
+import android.support.v4.view.ViewPager;
 import android.text.TextUtils;
+import android.view.Menu;
+import android.view.MenuItem;
 
-import com.actionbarsherlock.view.Menu;
-import com.actionbarsherlock.view.MenuItem;
-import com.github.mobile.R.id;
-import com.github.mobile.R.menu;
-import com.github.mobile.R.string;
+import com.github.mobile.R;
 import com.github.mobile.ui.TabPagerActivity;
 import com.github.mobile.util.AvatarLoader;
 import com.google.inject.Inject;
@@ -37,7 +36,7 @@ import org.eclipse.egit.github.core.Comment;
  * Base activity for creating comments
  */
 public abstract class CreateCommentActivity extends
-        TabPagerActivity<CommentPreviewPagerAdapter> {
+    TabPagerActivity<CommentPreviewPagerAdapter> {
 
     private MenuItem applyItem;
 
@@ -51,7 +50,23 @@ public abstract class CreateCommentActivity extends
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
+        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+
         configureTabPager();
+        slidingTabsLayout.setOnPageChangeListener(new ViewPager.OnPageChangeListener() {
+            @Override
+            public void onPageScrolled(int position, float positionOffset, int positionOffsetPixels) {
+            }
+
+            @Override
+            public void onPageSelected(int position) {
+                adapter.setCurrentItem(position);
+            }
+
+            @Override
+            public void onPageScrollStateChanged(int state) {
+            }
+        });
     }
 
     @Override
@@ -60,7 +75,7 @@ public abstract class CreateCommentActivity extends
 
         if (applyItem != null)
             applyItem.setEnabled(adapter != null
-                    && !TextUtils.isEmpty(adapter.getCommentText()));
+                && !TextUtils.isEmpty(adapter.getCommentText()));
     }
 
     @Override
@@ -92,35 +107,38 @@ public abstract class CreateCommentActivity extends
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         switch (item.getItemId()) {
-        case id.m_apply:
-            createComment(adapter.getCommentText());
-            return true;
-        default:
-            return super.onOptionsItemSelected(item);
+            case android.R.id.home:
+                finish();
+                return true;
+            case R.id.m_apply:
+                createComment(adapter.getCommentText());
+                return true;
+            default:
+                return super.onOptionsItemSelected(item);
         }
     }
 
     @Override
     protected String getTitle(final int position) {
         switch (position) {
-        case 0:
-            return getString(string.write);
-        case 1:
-            return getString(string.preview);
-        default:
-            return super.getTitle(position);
+            case 0:
+                return getString(R.string.write);
+            case 1:
+                return getString(R.string.preview);
+            default:
+                return super.getTitle(position);
         }
     }
 
     @Override
     protected String getIcon(final int position) {
         switch (position) {
-        case 0:
-            return ICON_EDIT;
-        case 1:
-            return ICON_WATCH;
-        default:
-            return super.getIcon(position);
+            case 0:
+                return ICON_EDIT;
+            case 1:
+                return ICON_WATCH;
+            default:
+                return super.getIcon(position);
         }
     }
 
@@ -131,8 +149,8 @@ public abstract class CreateCommentActivity extends
 
     @Override
     public boolean onCreateOptionsMenu(Menu options) {
-        getSupportMenuInflater().inflate(menu.comment, options);
-        applyItem = options.findItem(id.m_apply);
+        getMenuInflater().inflate(R.menu.comment, options);
+        applyItem = options.findItem(R.id.m_apply);
         return true;
     }
 }
